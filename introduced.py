@@ -3,7 +3,7 @@ import arcade
 
 class RqWin(arcade.Window):
     def __init__(self):
-        super().__init__(width=1280, height=720)
+        super().__init__(width=1280, height=720)  # Инициализатор
         self.hello_object = arcade.Text("Привет, любишь игры?", self.width // 2, self.height // 2)
         self.hello_object.anchor_x = "center"
         self.hello_object.anchor_y = "center"
