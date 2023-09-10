@@ -6,9 +6,14 @@ import pyglet.window.key
 
 class PlayerTest(arcade.Sprite):
     def __init__(self, filename: pathlib.Path, keyboard: pyglet.window.key.KeyStateHandler, texture_dict: dict):
+        """
+        Данный класс представляет собой тестового игрока. В разработке
+        :param filename: Путь к файлу изображения
+        :param keyboard: Клавиатурный объект
+        :param texture_dict: Словарь текстур для спрайта
+        """
         super().__init__(filename=None)
-        self.__texture_dict = texture_dict
-        self.textures = [texture_dict.get("stay", None)]
+        self.textures = [texture_dict.get("stay", None)]  # Устанавливаем базовую текстуру
         self.set_texture(0)
 
         self.animation_dict = {
@@ -16,32 +21,41 @@ class PlayerTest(arcade.Sprite):
             "run" : None
         }
 
-        self.texture_dict = texture_dict
+        self.texture_dict = texture_dict  # Добавляем данный словарь как поле класса
         self.facing = 1  # < if facing == 1 => вправо иначе влево
         self.keyboard_data = keyboard
-        self.speed = 5
-        self.acceleration = 2
+        self.speed = 5  # Скорость
+        self.acceleration = 2  # Ускоренние
 
-        self.animation_init()
+        self.animation_init()  # Инициализация анимаций
 
     def do_move(self):
-        self.facing = (self.keyboard_data[arcade.key.D] - self.keyboard_data[arcade.key.A])
-        self._coefficient_acceleration = self.facing * (self.acceleration * self.keyboard_data[arcade.key.LSHIFT])
-        dx = self.speed * self.facing + self._coefficient_acceleration
-        self.center_x += dx
-        if self.facing != 0 :
+        self.facing = (self.keyboard_data[arcade.key.D] - self.keyboard_data[arcade.key.A])  # Определяем направление
+        self._coefficient_acceleration = self.facing * (self.acceleration * self.keyboard_data[arcade.key.LSHIFT])  # Определяем коефицент ускорения
+        dx = self.speed * self.facing + self._coefficient_acceleration  # Определяем смещение объекта по оси x
+        self.center_x += dx  # Выполняем данное смешение
+        if self.facing != 0:
             print("гоним")
             self.player_animation_run.start_animation()
         if self.facing != 0:
             self.set_texture(0)
 
     def animation_init(self):
-        self.player_animation_run = RqAnimation(anim_obj=self, animation_list=self.__texture_dict.get("run"))
+        """
+        Данная функция инициилизирует анимации!
+        :return:
+        """
+        self.player_animation_run = RqAnimation(anim_obj=self, animation_list=self.texture_dict.get("run"))
 
 
 
 class RqAnimation:
     def __init__(self, anim_obj: arcade.Sprite = None, animation_list: list[arcade.Texture] = None):
+        """
+        Класс представляет собой базовую реализацию анимаций для спрайтов. В разработке
+        :param anim_obj: Анимируемый объект
+        :param animation_list: Листы анимации
+        """
         if animation_list is None or anim_obj is None:
             self.loaded = False
             return
@@ -86,6 +100,10 @@ class RqWindow(arcade.Window):
         return final_dict
 
     def create_player(self):
+        """
+        Данная функция инициилизирует игрока
+        :return:
+        """
         texture_dict = self.generate_player_texture("assets\\characters.png")
         texture_stay: arcade.Texture = texture_dict.get("stay")
 
@@ -100,7 +118,7 @@ class RqWindow(arcade.Window):
         self.player_.draw()
 
     def update(self, delta_time: float):
-        self.player_.do_move()
+        self.player_.do_move()  # Обнавляем игрока
 
 if __name__ == '__main__':
     app = RqWindow()
