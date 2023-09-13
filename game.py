@@ -1,5 +1,6 @@
 import arcade
 import system
+import PIL.Image
 
 
 class RqWindow(arcade.Window):
@@ -16,11 +17,15 @@ class RqWindow(arcade.Window):
         self.clear()
         self._system_engine.on_draw()
 
+    def on_mouse_press(self, x: int, y: int, button: int, modifiers: int):
+        self._system_engine.on_mouse_press(x, y, button, modifiers)
+
     def on_mouse_motion(self, x: int, y: int, dx: int, dy: int):
         self._system_engine.on_mouse_motion(x, y, dx, dy)
 
     def update(self, delta_time: float):
         self._system_engine.update()
+
 
 if __name__ == '__main__':
     _window = RqWindow()
